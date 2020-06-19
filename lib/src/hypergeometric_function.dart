@@ -88,8 +88,8 @@ double hyp2f1(double a, double b, double c, double x){
   double ia, ib, ic, id;
   double t1;
   int i, aid;
-  int neg_int_a = 0, neg_int_b = 0;
-  int neg_int_ca_or_cb = 0;
+  int negIntA = 0, negIntB = 0;
+  int negIntCaOrCb = 0;
 
   DoublePointer err = DoublePointer(0.0);
 
@@ -110,19 +110,19 @@ double hyp2f1(double a, double b, double c, double x){
   }
 
   if (a <= 0 && (a - ia).abs() < EPS) {	/* a is a negative integer */
-    neg_int_a = 1;
+    negIntA = 1;
   }
 
   if (b <= 0 && (b - ib).abs() < EPS) {	/* b is a negative integer */
-    neg_int_b = 1;
+    negIntB = 1;
   }
 
   if (d <= -1 && !((d - id).abs() > EPS && s < 0)
-      && !(neg_int_a != 0 || neg_int_b != 0)) {
+      && !(negIntA != 0 || negIntB != 0)) {
     return pow(s, d) * hyp2f1(c - a, c - b, c, x);
   }
 
-  if (d <= 0 && x == 1 && !(neg_int_a != 0 || neg_int_b != 0)){
+  if (d <= 0 && x == 1 && !(negIntA != 0 || negIntB != 0)){
     /* Return infinity*/
     return _hypdiv();
   }
@@ -130,8 +130,8 @@ double hyp2f1(double a, double b, double c, double x){
   if (ax < 1.0 || x == -1.0) {
     /* 2F1(a,b;b;x) = (1-x)**(-a) */
     if ((b - c).abs() < EPS) {	/* b = c */
-      if (neg_int_b != 0) {
-        y = hyp2f1_neg_c_equal_bc(a, b, x);
+      if (negIntB != 0) {
+        y = hyp2f1NegCEqualBc(a, b, x);
       } else {
         y = pow(s, -a);	/* s to the -a power */
       }
@@ -147,17 +147,17 @@ double hyp2f1(double a, double b, double c, double x){
     ic = c.round().toDouble();		/* nearest integer to c */
     if ((c - ic).abs() < EPS) {	/* c is a negative integer */
       /* check if termination before explosion */
-      if (neg_int_a != 0 && (ia > ic)){
+      if (negIntA != 0 && (ia > ic)){
        return _hypok(a, b, c, x, err);
       }
-      if (neg_int_b != 0 && (ib > ic)){
+      if (negIntB != 0 && (ib > ic)){
         return _hypok(a, b, c, x, err);
       }
       return _hypdiv();
     }
   }
 
-  if (neg_int_a != 0 || neg_int_b != 0){ 	/* function is a polynomial */
+  if (negIntA != 0 || negIntB != 0){ 	/* function is a polynomial */
     return _hypok(a, b, c, x, err);
   }
 
@@ -170,9 +170,9 @@ double hyp2f1(double a, double b, double c, double x){
     q = hyp2f1(b, 1 - c + b, 1 - a + b, 1.0 / x);
     p *= pow(-x, -a);
     q *= pow(-x, -b);
-    t1 = Gamma(c);
-    s = t1 * Gamma(b - a) / (Gamma(b) * Gamma(c - a));
-    y = t1 * Gamma(a - b) / (Gamma(a) * Gamma(c - b));
+    t1 = gamma(c);
+    s = t1 * gamma(b - a) / (gamma(b) * gamma(c - a));
+    y = t1 * gamma(a - b) / (gamma(a) * gamma(c - b));
     return s * p + y * q;
   }else if (x < -1.0) {
     if (a.abs() < b.abs()) {
@@ -190,12 +190,12 @@ double hyp2f1(double a, double b, double c, double x){
   p = c - a;
   ia = p.round().toDouble();		/* nearest integer to c-a */
   if ((ia <= 0.0) && ((p - ia).abs() < EPS))	/* negative int c - a */
-    neg_int_ca_or_cb = 1;
+    negIntCaOrCb = 1;
 
   r = c - b;
   ib = r.round().toDouble();		/* nearest integer to c-b */
   if ((ib <= 0.0) && ((r - ib).abs() < EPS))	/* negative int c - b */
-    neg_int_ca_or_cb = 1;
+    negIntCaOrCb = 1;
 
   id = d.round().toDouble();		/* nearest integer to d */
   q = (d - id).abs();
@@ -204,7 +204,7 @@ double hyp2f1(double a, double b, double c, double x){
    * for reporting a bug here.  */
   if ((ax - 1.0).abs() < EPS) {	/* |x| == 1.0   */
     if (x > 0.0) {
-      if (neg_int_ca_or_cb != 0) {
+      if (negIntCaOrCb != 0) {
         if (d >= 0.0)
           return _hypf(a, b, c, x, s, d, err);
         else{
@@ -214,7 +214,7 @@ double hyp2f1(double a, double b, double c, double x){
       if (d <= 0.0){
         return _hypdiv();
       }
-      y = Gamma(c) * Gamma(d) / (Gamma(p) * Gamma(r));
+      y = gamma(c) * gamma(d) / (gamma(p) * gamma(r));
       return _hypdon(y, err);
     }
     if (d <= -1.0){
@@ -251,7 +251,7 @@ double hyp2f1(double a, double b, double c, double x){
     return _hypdon(y, err);
   }
 
-  if (neg_int_ca_or_cb != 0) {
+  if (negIntCaOrCb != 0) {
     /* negative integer c-a or c-b */
     /* goto hypf; */
     return _hypf(a, b, c, x, s, d, err);
@@ -296,22 +296,22 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
   int i, aid, sign;
   DoublePointer err, err1;
 
-  int ia, ib, neg_int_a = 0, neg_int_b = 0;
+  int ia, ib, negIntA = 0, negIntB = 0;
 
   ia = a.round();
   ib = b.round();
 
   if (a <= 0 && (a - ia).abs() < EPS) {	/* a is a negative integer */
-    neg_int_a = 1;
+    negIntA = 1;
   }
 
   if (b <= 0 && (b - ib).abs() < EPS) {	/* b is a negative integer */
-    neg_int_b = 1;
+    negIntB = 1;
   }
 
   err = DoublePointer(0.0);
   s = 1.0 - x;
-  if (x < -0.5 && !(neg_int_a != 0 || neg_int_b != 0)) {
+  if (x < -0.5 && !(negIntA != 0 || negIntB != 0)) {
     if (b > a)
       y = pow(s, -a) * hys2f1(a, c - b, c, -x / s, err);
 
@@ -325,7 +325,7 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
   d = c - a - b;
   id = d.round().toDouble();		/* nearest integer to d */
 
-  if (x > 0.9 && !(neg_int_a != 0 || neg_int_b != 0)) {
+  if (x > 0.9 && !(negIntA != 0 || negIntB != 0)) {
     if ((d - id).abs() > EPS) {
       IntPointer sgngam = IntPointer();
 
@@ -340,21 +340,21 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
       /* If power series fails, then apply AMS55 #15.3.6 */
       q = hys2f1(a, b, 1.0 - d, s, err);
             sign = 1;
-            w = lgam_sgn(d, sgngam);
+            w = lgamSgn(d, sgngam);
             sign *= sgngam.value;
-            w -= lgam_sgn(c-a, sgngam);
+            w -= lgamSgn(c-a, sgngam);
             sign *= sgngam.value;
-            w -= lgam_sgn(c-b, sgngam);
+            w -= lgamSgn(c-b, sgngam);
             sign *= sgngam.value;
       q *= sign * exp(w);
       err1 = DoublePointer();
       r = pow(s, d) * hys2f1(c - a, c - b, d + 1.0, s, err1);
             sign = 1;
-            w = lgam_sgn(-d, sgngam);
+            w = lgamSgn(-d, sgngam);
             sign *= sgngam.value;
-            w -= lgam_sgn(a, sgngam);
+            w -= lgamSgn(a, sgngam);
             sign *= sgngam.value;
-            w -= lgam_sgn(b, sgngam);
+            w -= lgamSgn(b, sgngam);
             sign *= sgngam.value;
       r *= sign * exp(w);
       y = q + r;
@@ -365,7 +365,7 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
     r = q;
       err.value += err1.value + (MACHEP * r) / y;
 
-      y *= Gamma(c);
+      y *= gamma(c);
       loss.value = err.value;
       return y;
     }else {
@@ -392,9 +392,9 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
 
       /* sum for t = 0 */
       y = psi(1.0) + psi(1.0 + e) - psi(a + d1) - psi(b + d1) - ax;
-      y /= Gamma(e + 1.0);
+      y /= gamma(e + 1.0);
 
-      p = (a + d1) * (b + d1) * s / Gamma(e + 2.0);	/* Poch for t=1 */
+      p = (a + d1) * (b + d1) * s / gamma(e + 2.0);	/* Poch for t=1 */
       t = 1.0;
       do {
         r = psi(1.0 + t) + psi(1.0 + t + e) - psi(a + t + d1)
@@ -412,7 +412,7 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
       }while (y == 0 || (q / y).abs() > EPS);
 
       if (id == 0.0) {
-        y *= Gamma(c) / (Gamma(a) * Gamma(b));
+        y *= gamma(c) / (gamma(a) * gamma(b));
         loss.value = err.value;
         return y;
       }
@@ -421,10 +421,10 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
 
       if (aid == 1){
         /*goto nosum*/
-        p = Gamma(c);
-        y1 *= Gamma(e) * p / (Gamma(a + d1) * Gamma(b + d1));
+        p = gamma(c);
+        y1 *= gamma(e) * p / (gamma(a + d1) * gamma(b + d1));
 
-        y *= p / (Gamma(a + d2) * Gamma(b + d2));
+        y *= p / (gamma(a + d2) * gamma(b + d2));
         if ((aid & 1) != 0){
           y = -y;
         }
@@ -454,10 +454,10 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
       }
 
       /*no sum*/
-      p = Gamma(c);
-      y1 *= Gamma(e) * p / (Gamma(a + d1) * Gamma(b + d1));
+      p = gamma(c);
+      y1 *= gamma(e) * p / (gamma(a + d1) * gamma(b + d1));
 
-      y *= p / (Gamma(a + d2) * Gamma(b + d2));
+      y *= p / (gamma(a + d2) * gamma(b + d2));
       if ((aid & 1) != 0){
         y = -y;
       }
@@ -622,11 +622,11 @@ double hyp2f1ra(double a, double b, double c, double x, DoublePointer loss){
 /*
   15.4.2 Abramowitz & Stegun.
 */
-double hyp2f1_neg_c_equal_bc(double a, double b, double x) {
+double hyp2f1NegCEqualBc(double a, double b, double x) {
   double k;
   double collector = 1;
   double sum = 1;
-  double collector_max = 1;
+  double collectorMax = 1;
 
   if (!(b.abs() < 1e5)) {
     return double.nan;
@@ -634,11 +634,11 @@ double hyp2f1_neg_c_equal_bc(double a, double b, double x) {
 
   for (k = 1; k <= -b; k++) {
     collector *= (a + k - 1)*x/k;
-    collector_max = max<double>(collector.abs(), collector_max);
+    collectorMax = max<double>(collector.abs(), collectorMax);
     sum += collector;
   }
 
-  if (1e-16 * (1 + collector_max/sum.abs()) > 1e-7) {
+  if (1e-16 * (1 + collectorMax/sum.abs()) > 1e-7) {
     return double.nan;
   }
 

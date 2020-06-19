@@ -55,10 +55,8 @@ import './incbet.dart';
 
 double incbi(double aa, double bb, double yy0){
   double a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt;
-  int i, rflg, dir, nflg;
+  int rflg, dir, nflg;
 
-
-  i = 0;
   if (yy0 <= 0)
     return (0.0);
   if (yy0 >= 1.0)
@@ -117,7 +115,7 @@ double incbi(double aa, double bb, double yy0){
   if (yp.abs() < 0.2)
     return _newt(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
 
-
+  return _ihalve(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
 }
 
 double _ihalve(double aa, double bb, double yy0,

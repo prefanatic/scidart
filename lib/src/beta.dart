@@ -39,7 +39,6 @@
  *
  */
 
-
 /*
  * Cephes Math Library Release 2.0:  April, 1987
  * Copyright 1984, 1987 by Stephen L. Moshier
@@ -53,17 +52,15 @@ import './pointers.dart';
 
 const double ASYMP_FACTOR = 1e6;
 
-double beta(double a, double b)
-{
+double beta(double a, double b) {
   double y;
   IntPointer sign = IntPointer(1);
 
   if (a <= 0.0) {
     if (a == a.floor()) {
       if (a == a.toInt()) {
-        return beta_negint(a.toInt(), b);
-      }
-      else {
+        return betaNegint(a.toInt(), b);
+      } else {
         return _overflow(sign.value);
       }
     }
@@ -72,32 +69,33 @@ double beta(double a, double b)
   if (b <= 0.0) {
     if (b == b.floor()) {
       if (b == b.toInt()) {
-        return beta_negint(b.toInt(), a);
-      }
-      else {
+        return betaNegint(b.toInt(), a);
+      } else {
         return _overflow(sign.value);
       }
     }
   }
 
   if (a.abs() < b.abs()) {
-    y = a; a = b; b = y;
+    y = a;
+    a = b;
+    b = y;
   }
 
   if (a.abs() > ASYMP_FACTOR * b.abs() && a > ASYMP_FACTOR) {
     /* Avoid loss of precision in lgam(a + b) - lgam(a) */
-    y = lbeta_asymp(a, b, sign);
+    y = lbetaAsymp(a, b, sign);
     return sign.value * exp(y);
   }
 
   y = a + b;
   if (y.abs() > MAXGAM || a.abs() > MAXGAM || b.abs() > MAXGAM) {
     IntPointer sgngam = IntPointer();
-    y = lgam_sgn(y, sgngam);
-    sign.value *= sgngam.value;		/* keep track of the sign */
-    y = lgam_sgn(b, sgngam) - y;
+    y = lgamSgn(y, sgngam);
+    sign.value *= sgngam.value; /* keep track of the sign */
+    y = lgamSgn(b, sgngam) - y;
     sign.value *= sgngam.value;
-    y = lgam_sgn(a, sgngam) + y;
+    y = lgamSgn(a, sgngam) + y;
     sign.value *= sgngam.value;
     if (y > MAXLOG) {
       return _overflow(sign.value);
@@ -105,17 +103,15 @@ double beta(double a, double b)
     return (sign.value * exp(y));
   }
 
-  y = Gamma(y);
-  a = Gamma(a);
-  b = Gamma(b);
-  if (y == 0.0)
-    return _overflow(sign.value);
+  y = gamma(y);
+  a = gamma(a);
+  b = gamma(b);
+  if (y == 0.0) return _overflow(sign.value);
 
   if ((a.abs() - y.abs()).abs() > (b.abs() - y.abs()).abs()) {
     y = b / y;
     y *= a;
-  }
-  else {
+  } else {
     y = a / y;
     y *= b;
   }
@@ -123,8 +119,8 @@ double beta(double a, double b)
   return (y);
 }
 
-double _overflow(int sign){
-  return sign*double.infinity;
+double _overflow(int sign) {
+  return sign * double.infinity;
 }
 
 /* Natural log of |beta|. */
@@ -136,9 +132,8 @@ double lbeta(double a, double b) {
   if (a <= 0.0) {
     if (a == a.floor()) {
       if (a == a.toInt()) {
-        return lbeta_negint(a.toInt(), b);
-      }
-      else {
+        return lbetaNegint(a.toInt(), b);
+      } else {
         return _over(sign);
       }
     }
@@ -147,39 +142,40 @@ double lbeta(double a, double b) {
   if (b <= 0.0) {
     if (b == b.floor()) {
       if (b == b.toInt()) {
-        return lbeta_negint(b.toInt(), a);
-      }
-      else {
+        return lbetaNegint(b.toInt(), a);
+      } else {
         return _over(sign);
       }
     }
   }
 
   if (a.abs() < b.abs()) {
-    y = a; a = b; b = y;
+    y = a;
+    a = b;
+    b = y;
   }
 
   if (a.abs() > ASYMP_FACTOR * b.abs() && a > ASYMP_FACTOR) {
     /* Avoid loss of precision in lgam(a + b) - lgam(a) */
-    y = lbeta_asymp(a, b, sign);
+    y = lbetaAsymp(a, b, sign);
     return y;
   }
 
   y = a + b;
   if (y.abs() > MAXGAM || a.abs() > MAXGAM || b.abs() > MAXGAM) {
     IntPointer sgngam = IntPointer();
-    y = lgam_sgn(y, sgngam);
-    sign.value *= sgngam.value;		/* keep track of the sign */
-    y = lgam_sgn(b, sgngam) - y;
+    y = lgamSgn(y, sgngam);
+    sign.value *= sgngam.value; /* keep track of the sign */
+    y = lgamSgn(b, sgngam) - y;
     sign.value *= sgngam.value;
-    y = lgam_sgn(a, sgngam) + y;
+    y = lgamSgn(a, sgngam) + y;
     sign.value *= sgngam.value;
     return (y);
   }
 
-  y = Gamma(y);
-  a = Gamma(a);
-  b = Gamma(b);
+  y = gamma(y);
+  a = gamma(a);
+  b = gamma(b);
   if (y == 0.0) {
     return _over(sign);
   }
@@ -187,8 +183,7 @@ double lbeta(double a, double b) {
   if ((a.abs() - y.abs()).abs() > (b.abs() - y.abs()).abs()) {
     y = b / y;
     y *= a;
-  }
-  else {
+  } else {
     y = a / y;
     y *= b;
   }
@@ -200,20 +195,20 @@ double lbeta(double a, double b) {
   return (log(y));
 }
 
-double _over(IntPointer sign){
-  return sign.value*double.infinity;
+double _over(IntPointer sign) {
+  return sign.value * double.infinity;
 }
 
 /*
  * Asymptotic expansion for  ln(|B(a, b)|) for a > ASYMP_FACTOR*max(|b|, 1).
  */
-double lbeta_asymp(double a, double b, IntPointer sgn){
-  double r = lgam_sgn(b, sgn);
+double lbetaAsymp(double a, double b, IntPointer sgn) {
+  double r = lgamSgn(b, sgn);
   r -= b * log(a);
 
-  r += b*(1-b)/(2*a);
-  r += b*(1-b)*(1-2*b)/(12*a*a);
-  r += - b*b*(1-b)*(1-b)/(12*a*a*a);
+  r += b * (1 - b) / (2 * a);
+  r += b * (1 - b) * (1 - 2 * b) / (12 * a * a);
+  r += -b * b * (1 - b) * (1 - b) / (12 * a * a * a);
 
   return r;
 }
@@ -222,24 +217,22 @@ double lbeta_asymp(double a, double b, IntPointer sgn){
  * Special case for a negative integer argument
  */
 
-double beta_negint(int a, double b){
+double betaNegint(int a, double b) {
   int sgn;
   if (b == b.toInt() && 1 - a - b > 0) {
     sgn = (b.toInt() % 2 == 0) ? 1 : -1;
     return sgn * beta(1 - a - b, b);
-  }
-  else {
+  } else {
     return double.infinity;
   }
 }
 
-double lbeta_negint(int a, double b){
+double lbetaNegint(int a, double b) {
   double r;
   if (b == b.toInt() && 1 - a - b > 0) {
     r = lbeta(1 - a - b, b);
     return r;
-  }
-  else {
+  } else {
     return double.infinity;
   }
 }

@@ -72,7 +72,7 @@ import './gamma.dart';
 
 const double NPY_EULER = 0.577215664901532860606512090082402431;  /* Euler constant */
 
-double digamma_imp_1_2(double x){
+double digammaImp12(double x){
   /*
      * Rational approximation on [1, 2] taken from Boost.
      *
@@ -121,7 +121,7 @@ double digamma_imp_1_2(double x){
   return g * Y + g * r;
 }
 
-double psi_asy(double x){
+double psiAsy(double x){
   double y, z;
 
   if (x < 1.0e17) {
@@ -187,11 +187,11 @@ double psi(double x) {
     }
   }
   if ((1.0 <= x) && (x <= 2.0)) {
-    y += digamma_imp_1_2(x);
+    y += digammaImp12(x);
     return y;
   }
 
   /* x is large, use the asymptotic series */
-  y += psi_asy(x);
+  y += psiAsy(x);
   return y;
 }

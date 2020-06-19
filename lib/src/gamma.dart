@@ -131,7 +131,7 @@ const List<double> STIR = [
 const double MAXSTIR = 143.01608;
 const double SQTPI = 2.50662827463100050242E0;
 
-double MAXLOG = 7.09782712893383996732E2;
+const double MAXLOG = 7.09782712893383996732E2;
 const double MAXLGM = 2.556348e305;
 
 /* Gamma function computed by Stirling's formula.
@@ -157,7 +157,7 @@ double stirf(double x){
   return (y);
 }
 
-double Gamma(double x){
+double gamma(double x){
   double p, q, z;
   int i;
   int sgngam = 1;
@@ -275,10 +275,10 @@ const double LS2PI = 0.91893853320467274178;
 /* Logarithm of Gamma function */
 double lgam(double x) {
   IntPointer sign = IntPointer();
-  return lgam_sgn(x, sign);
+  return lgamSgn(x, sign);
 }
 
-double lgam_sgn(double x, IntPointer sign){
+double lgamSgn(double x, IntPointer sign){
   double p, q, u, w, z;
   int i;
 
@@ -290,7 +290,7 @@ double lgam_sgn(double x, IntPointer sign){
 
   if (x < -34.0) {
     q = -x;
-    w = lgam_sgn(q, sign);
+    w = lgamSgn(q, sign);
     p = q.floor().toDouble();
     if (p == q) {
       return double.infinity;

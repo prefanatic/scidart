@@ -78,13 +78,11 @@
  *    IEEE    10^-6,.001    25000       2.0e-12     2.9e-14
  */
 
-
 /*
  * Cephes Math Library Release 2.3:  March, 1995
  * Copyright 1984, 1987, 1995 by Stephen L. Moshier
  * Converted to Dart by @Javierd
  */
-
 
 import 'dart:math';
 
@@ -92,7 +90,7 @@ import './hypergeometric_function.dart';
 import './incbet.dart';
 import './incbi.dart';
 
-double stdtr(int k, double t){
+double stdtr(int k, double t) {
   double x, rk, z, f, tz, p, xsqk;
   int j;
 
@@ -100,8 +98,7 @@ double stdtr(int k, double t){
     return double.nan;
   }
 
-  if (t == 0)
-    return (0.5);
+  if (t == 0) return (0.5);
 
   if (t < -2.0) {
     rk = k.toDouble();
@@ -117,13 +114,11 @@ double stdtr(int k, double t){
   else
     x = t;
 
-  rk = k.toDouble();			/* degrees of freedom */
+  rk = k.toDouble(); /* degrees of freedom */
   z = 1.0 + (x * x) / rk;
-
 
   /* test if k is odd or even */
   if ((k & 1) != 0) {
-
     /*      computation for odd k   */
 
     xsqk = x / sqrt(rk);
@@ -140,8 +135,7 @@ double stdtr(int k, double t){
       p += f * xsqk / z;
     }
     p *= 2.0 / pi;
-  }else {
-
+  } else {
     /*      computation for even k  */
 
     f = 1.0;
@@ -158,15 +152,13 @@ double stdtr(int k, double t){
 
   /*     common exit     */
 
-
-  if (t < 0)
-    p = -p;			/* note destruction of relative accuracy */
+  if (t < 0) p = -p; /* note destruction of relative accuracy */
 
   p = 0.5 + 0.5 * p;
   return (p);
 }
 
-double stdtri(int k, double p){
+double stdtri(int k, double p) {
   double t, rk, z;
   int rflg;
 
@@ -177,13 +169,11 @@ double stdtri(int k, double p){
   rk = k.toDouble();
 
   if (p > 0.25 && p < 0.75) {
-    if (p == 0.5)
-      return (0.0);
+    if (p == 0.5) return (0.0);
     z = 1.0 - 2.0 * p;
     z = incbi(0.5, 0.5 * rk, z.abs());
     t = sqrt(rk * z / (1.0 - z));
-    if (p < 0.5)
-      t = -t;
+    if (p < 0.5) t = -t;
     return (t);
   }
   rflg = -1;
@@ -193,8 +183,7 @@ double stdtri(int k, double p){
   }
   z = incbi(0.5 * rk, 0.5, 2.0 * p);
 
-  if (double.maxFinite * z < rk)
-    return (rflg * double.infinity);
+  if (double.maxFinite * z < rk) return (rflg * double.infinity);
   t = sqrt(rk / z - rk);
   return (rflg * t);
 }

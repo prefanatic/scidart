@@ -100,7 +100,7 @@ double p1evl(double x, final List<double> coef, int N){
 
 double ratevl(double x, List<double> num, int M, List<double> denom, int N) {
   int i, j, dir;
-  double y, num_ans, denom_ans;
+  double y, numAns, denomAns;
   double absx = (x).abs();
 
   if (absx > 1) {
@@ -115,10 +115,10 @@ double ratevl(double x, List<double> num, int M, List<double> denom, int N) {
   }
 
   /* Evaluate the numerator */
-  num_ans = num[j];
+  numAns = num[j];
   j += dir;
   for (i = 1; i <= M; i++) {
-    num_ans = num_ans * y + num[j];
+    numAns = numAns * y + num[j];
     j += dir;
   }
 
@@ -129,17 +129,17 @@ double ratevl(double x, List<double> num, int M, List<double> denom, int N) {
     j = 0;
   }
 
-  denom_ans = denom[j];
+  denomAns = denom[j];
   j += dir;
   for (i = 1; i <= N; i++) {
-    denom_ans = denom_ans * y + denom[j];
+    denomAns = denomAns * y + denom[j];
     j += dir;
   }
 
   if (absx > 1) {
     i = N - M;
-    return pow(x, i) * num_ans / denom_ans;
+    return pow(x, i) * numAns / denomAns;
   } else {
-    return num_ans / denom_ans;
+    return numAns / denomAns;
   }
 }

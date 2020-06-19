@@ -10,7 +10,7 @@ class DoublePointer {
   DoublePointer([this.value]);
 }
 
-class IntPointer{
+class IntPointer {
   int value;
 
   IntPointer([this.value]);

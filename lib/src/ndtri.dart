@@ -43,7 +43,6 @@
  *
  */
 
-
 /*
  * Cephes Math Library Release 2.1:  January, 1989
  * Copyright 1984, 1987, 1989 by Stephen L. Moshier
@@ -134,7 +133,7 @@ const List<double> Q2 = [
   6.79019408009981274425E-9,
 ];
 
-double ndtri(double y0){
+double ndtri(double y0) {
   double x, y, z, y2, x0, x1;
   int code;
 
@@ -150,7 +149,8 @@ double ndtri(double y0){
   }
   code = 1;
   y = y0;
-  if (y > (1.0 - 0.13533528323661269189)) {	/* 0.135... = exp(-2) */
+  if (y > (1.0 - 0.13533528323661269189)) {
+    /* 0.135... = exp(-2) */
     y = 1.0 - y;
     code = 0;
   }
@@ -167,12 +167,11 @@ double ndtri(double y0){
   x0 = x - log(x) / x;
 
   z = 1.0 / x;
-  if (x < 8.0)		/* y > exp(-32) = 1.2664165549e-14 */
+  if (x < 8.0) /* y > exp(-32) = 1.2664165549e-14 */
     x1 = z * polevl(z, P1, 8) / p1evl(z, Q1, 8);
   else
     x1 = z * polevl(z, P2, 8) / p1evl(z, Q2, 8);
   x = x0 - x1;
-  if (code != 0)
-    x = -x;
+  if (code != 0) x = -x;
   return (x);
 }
