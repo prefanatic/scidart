@@ -1,4 +1,4 @@
-# scidart
+# scipy_port
 
 This Dart package include some scipy functionalities which are directly ported from its source code.
 

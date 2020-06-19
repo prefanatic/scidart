@@ -1,8 +1,7 @@
-name: scidart
+name: scipy_port
 description: A simple (and partial) scipy port for Dart
 version: 0.0.1
-author: Javier Delgado del cerro
-homepage: https://github.com/Javierd/scidart
+homepage: https://github.com/Javierd/scipy_port
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

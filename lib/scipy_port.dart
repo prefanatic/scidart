@@ -2,7 +2,7 @@
 * Port of some scipy utilities from scipy.special and scipy.stats to Dart.
 * */
 
-library scidart;
+library scipy_port;
 
 export 'src/beta.dart';
 export 'src/gamma.dart';
