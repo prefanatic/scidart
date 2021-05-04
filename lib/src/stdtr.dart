@@ -103,7 +103,7 @@ double stdtr(int k, double t) {
   if (t < -2.0) {
     rk = k.toDouble();
     z = rk / (rk + t * t);
-    p = 0.5 * incbet(0.5 * rk, 0.5, z);
+    p = 0.5 * incbet(0.5 * rk, 0.5, z)!;
     return (p);
   }
 
@@ -159,7 +159,7 @@ double stdtr(int k, double t) {
 }
 
 double stdtri(int k, double p) {
-  double t, rk, z;
+  double? t, rk, z;
   int rflg;
 
   if (k <= 0 || p <= 0.0 || p >= 1.0) {
@@ -172,7 +172,7 @@ double stdtri(int k, double p) {
     if (p == 0.5) return (0.0);
     z = 1.0 - 2.0 * p;
     z = incbi(0.5, 0.5 * rk, z.abs());
-    t = sqrt(rk * z / (1.0 - z));
+    t = sqrt(rk * z! / (1.0 - z));
     if (p < 0.5) t = -t;
     return (t);
   }
@@ -183,7 +183,7 @@ double stdtri(int k, double p) {
   }
   z = incbi(0.5 * rk, 0.5, 2.0 * p);
 
-  if (double.maxFinite * z < rk) return (rflg * double.infinity);
+  if (double.maxFinite * z! < rk) return (rflg * double.infinity);
   t = sqrt(rk / z - rk);
   return (rflg * t);
 }

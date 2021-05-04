@@ -133,12 +133,12 @@ double hyp2f1(double a, double b, double c, double x){
       if (negIntB != 0) {
         y = hyp2f1NegCEqualBc(a, b, x);
       } else {
-        y = pow(s, -a);	/* s to the -a power */
+        y = pow(s, -a) as double;	/* s to the -a power */
       }
       return _hypdon(y, err);
     }
     if ((a - c).abs() < EPS) {	/* a = c */
-      y = pow(s, -b);	/* s to the -b power */
+      y = pow(s, -b) as double;	/* s to the -b power */
       return _hypdon(y, err);
     }
   }
@@ -429,7 +429,7 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
           y = -y;
         }
 
-        q = pow(s, id);	/* s to the id power */
+        q = pow(s, id) as double;	/* s to the id power */
         if (id > 0.0){
           y *= q;
         }else{
@@ -462,7 +462,7 @@ double hyt2f1(double a, double b, double c, double x, DoublePointer loss){
         y = -y;
       }
 
-      q = pow(s, id);	/* s to the id power */
+      q = pow(s, id) as double;	/* s to the id power */
       if (id > 0.0){
         y *= q;
       }else{

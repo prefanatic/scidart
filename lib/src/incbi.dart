@@ -53,9 +53,9 @@ import './gamma.dart';
 import './hypergeometric_function.dart';
 import './incbet.dart';
 
-double incbi(double aa, double bb, double yy0){
-  double a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt;
-  int rflg, dir, nflg;
+double? incbi(double aa, double bb, double yy0){
+  double? a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt;
+  int? rflg, dir, nflg;
 
   if (yy0 <= 0)
     return (0.0);
@@ -111,17 +111,17 @@ double incbi(double aa, double bb, double yy0){
   }
   x = a / (a + b * exp(d));
   y = incbet(a, b, x);
-  yp = (y - y0) / y0;
+  yp = (y! - y0) / y0;
   if (yp.abs() < 0.2)
     return _newt(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
 
   return _ihalve(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
 }
 
-double _ihalve(double aa, double bb, double yy0,
-    double a, double b, double y0, double d, double y, double x,
-    double x0, double x1, double lgm, double yp, double di, double dithresh,
-    double yl, double yh, double xt, int rflg, int dir, int nflg
+double? _ihalve(double aa, double bb, double yy0,
+    double a, double b, double y0, double? d, double? y, double? x,
+    double? x0, double? x1, double? lgm, double? yp, double? di, double dithresh,
+    double? yl, double? yh, double? xt, int rflg, int? dir, int? nflg
     ){
   int i;
 
@@ -129,7 +129,7 @@ double _ihalve(double aa, double bb, double yy0,
   di = 0.5;
   for (i = 0; i < 100; i++) {
     if (i != 0) {
-      x = x0 + di * (x1 - x0);
+      x = x0! + di! * (x1! - x0);
       if (x == 1.0)
         x = 1.0 - MACHEP;
       if (x == 0.0) {
@@ -144,25 +144,25 @@ double _ihalve(double aa, double bb, double yy0,
       yp = (x1 - x0) / (x1 + x0);
       if (yp.abs() < dithresh)
         return _newt(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
-      yp = (y - y0) / y0;
+      yp = (y! - y0) / y0;
       if (yp.abs() < dithresh)
         return _newt(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
     }
-    if (y < y0) {
+    if (y! < y0) {
       x0 = x;
       yl = y;
-      if (dir < 0) {
+      if (dir! < 0) {
         dir = 0;
         di = 0.5;
       }
       else if (dir > 3)
-        di = 1.0 - (1.0 - di) * (1.0 - di);
+        di = 1.0 - (1.0 - di!) * (1.0 - di);
       else if (dir > 1)
-        di = 0.5 * di + 0.5;
+        di = 0.5 * di! + 0.5;
       else
-        di = (y0 - y) / (yh - yl);
+        di = (y0 - y) / (yh! - yl);
       dir += 1;
-      if (x0 > 0.75) {
+      if (x0! > 0.75) {
         if (rflg == 1) {
           rflg = 0;
           a = aa;
@@ -175,7 +175,7 @@ double _ihalve(double aa, double bb, double yy0,
           b = aa;
           y0 = 1.0 - yy0;
         }
-        x = 1.0 - x;
+        x = 1.0 - x!;
         y = incbet(a, b, x);
         x0 = 0.0;
         yl = 0.0;
@@ -186,30 +186,30 @@ double _ihalve(double aa, double bb, double yy0,
     }
     else {
       x1 = x;
-      if (rflg == 1 && x1 < MACHEP) {
+      if (rflg == 1 && x1! < MACHEP) {
         x = 0.0;
         return _done(x, rflg);
       }
       yh = y;
-      if (dir > 0) {
+      if (dir! > 0) {
         dir = 0;
         di = 0.5;
       }
       else if (dir < -3)
-        di = di * di;
+        di = di! * di;
       else if (dir < -1)
-        di = 0.5 * di;
+        di = 0.5 * di!;
       else
-        di = (y - y0) / (yh - yl);
+        di = (y - y0) / (yh - yl!);
       dir -= 1;
     }
   }
   /* sf_error("incbi", SF_ERROR_LOSS, NULL); */
-  if (x0 >= 1.0) {
+  if (x0! >= 1.0) {
     x = 1.0 - MACHEP;
     return _done(x, rflg);
   }
-  if (x <= 0.0) {
+  if (x! <= 0.0) {
     /*sf_error("incbi", SF_ERROR_UNDERFLOW, NULL); */
     x = 0.0;
     return _done(x, rflg);
@@ -218,10 +218,10 @@ double _ihalve(double aa, double bb, double yy0,
   return _newt(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
 }
 
-double _newt(double aa, double bb, double yy0,
-    double a, double b, double y0, double d, double y, double x,
-    double x0, double x1, double lgm, double yp, double di, double dithresh,
-    double yl, double yh, double xt, int rflg, int dir, int nflg){
+double? _newt(double aa, double bb, double yy0,
+    double a, double b, double y0, double? d, double? y, double? x,
+    double? x0, double? x1, double? lgm, double? yp, double? di, double dithresh,
+    double? yl, double? yh, double? xt, int rflg, int? dir, int? nflg){
   int i;
 
   if (nflg != 0)
@@ -233,11 +233,11 @@ double _newt(double aa, double bb, double yy0,
     /* Compute the function at this point. */
     if (i != 0)
       y = incbet(a, b, x);
-    if (y < yl) {
+    if (y! < yl!) {
       x = x0;
       y = yl;
     }
-    else if (y > yh) {
+    else if (y > yh!) {
       x = x1;
       y = yh;
     }
@@ -252,7 +252,7 @@ double _newt(double aa, double bb, double yy0,
     if (x == 1.0 || x == 0.0)
       break;
     /* Compute the derivative of the function at this point. */
-    d = (a - 1.0) * log(x) + (b - 1.0) * log(1.0 - x) + lgm;
+    d = (a - 1.0) * log(x!) + (b - 1.0) * log(1.0 - x) + lgm;
     if (d < MINLOG)
       return _done(x, rflg);
     if (d > MAXLOG)
@@ -261,13 +261,13 @@ double _newt(double aa, double bb, double yy0,
     /* Compute the step to the next approximation of x. */
     d = (y - y0) / d;
     xt = x - d;
-    if (xt <= x0) {
-      y = (x - x0) / (x1 - x0);
+    if (xt <= x0!) {
+      y = (x - x0) / (x1! - x0);
       xt = x0 + 0.5 * y * (x - x0);
       if (xt <= 0.0)
         break;
     }
-    if (xt >= x1) {
+    if (xt >= x1!) {
       y = (x1 - x) / (x1 - x0);
       xt = x1 - 0.5 * y * (x1 - x);
       if (xt >= 1.0)
@@ -282,9 +282,9 @@ double _newt(double aa, double bb, double yy0,
   return _ihalve(aa, bb, yy0, a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt, rflg, dir, nflg);
 }
 
-double _done(double x, int rflg){
+double? _done(double? x, int rflg){
   if (rflg != 0) {
-    if (x <= MACHEP)
+    if (x! <= MACHEP)
       x = 1.0 - MACHEP;
     else
       x = 1.0 - x;

@@ -147,7 +147,7 @@ double stirf(double x){
   w = 1.0 + w * polevl(w, STIR, 4);
   y = exp(x);
   if (x > MAXSTIR) {		/* Avoid overflow in pow() */
-    v = pow(x, 0.5 * x - 0.25);
+    v = pow(x, 0.5 * x - 0.25) as double;
     y = v * (v / y);
   }
   else {

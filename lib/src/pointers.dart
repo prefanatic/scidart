@@ -7,11 +7,11 @@
 class DoublePointer {
   double value;
 
-  DoublePointer([this.value]);
+  DoublePointer([this.value = 0.0]);
 }
 
 class IntPointer {
   int value;
 
-  IntPointer([this.value]);
+  IntPointer([this.value = 0]);
 }

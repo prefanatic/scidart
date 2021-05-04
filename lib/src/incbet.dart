@@ -53,7 +53,6 @@
  * incbet underflow                     0.0
  */
 
-
 /*
  * Cephes Math Library, Release 2.3:  March, 1995
  * Copyright 1984, 1995 by Stephen L. Moshier
@@ -69,18 +68,15 @@ const double MINLOG = -7.08396418532264106224E2;
 const double big = 4.503599627370496e15;
 const double biginv = 2.22044604925031308085e-16;
 
-double incbet(double aa, double bb, double xx){
-  double a, b, t, x, xc, w, y;
+double? incbet(double aa, double bb, double? xx) {
+  double? a, b, t, x, xc, w, y;
   int flag;
 
-  if (aa <= 0.0 || bb <= 0.0)
-    return double.nan;
+  if (aa <= 0.0 || bb <= 0.0) return double.nan;
 
-  if ((xx <= 0.0) || (xx >= 1.0)) {
-    if (xx == 0.0)
-      return (0.0);
-    if (xx == 1.0)
-      return (1.0);
+  if ((xx! <= 0.0) || (xx >= 1.0)) {
+    if (xx == 0.0) return (0.0);
+    if (xx == 1.0) return (1.0);
     return double.nan;
   }
 
@@ -99,8 +95,7 @@ double incbet(double aa, double bb, double xx){
     b = aa;
     xc = xx;
     x = w;
-  }
-  else {
+  } else {
     a = aa;
     b = bb;
     xc = w;
@@ -119,7 +114,6 @@ double incbet(double aa, double bb, double xx){
   else
     w = incbd(a, b, x) / xc;
 
-
   /* Multiply w by the factor
      * a      b   _             _     _
      * x  (1-x)   | (a+b) / ( a | (a) | (b) ) .   */
@@ -127,7 +121,7 @@ double incbet(double aa, double bb, double xx){
   y = a * log(x);
   t = b * log(xc);
   if ((a + b) < MAXGAM && y.abs() < MAXLOG && t.abs() < MAXLOG) {
-    t = pow(xc, b);
+    t = pow(xc, b) as double;
     t *= pow(x, a);
     t /= a;
     t *= w;
@@ -135,7 +129,7 @@ double incbet(double aa, double bb, double xx){
     return _done(flag, t);
   }
   /* Resort to logarithms.  */
-  y += t - lbeta(a,b);
+  y += t - lbeta(a, b);
   y += log(w / a);
   if (y < MINLOG)
     t = 0.0;
@@ -145,9 +139,9 @@ double incbet(double aa, double bb, double xx){
   return _done(flag, t);
 }
 
-double _done(int flag, double t){
+double? _done(int flag, double? t) {
   if (flag == 1) {
-    if (t <= MACHEP)
+    if (t! <= MACHEP)
       t = 1.0 - MACHEP;
     else
       t = 1.0 - t;
@@ -155,11 +149,10 @@ double _done(int flag, double t){
   return (t);
 }
 
-
 /* Continued fraction expansion #1
  * for incomplete beta integral
  */
-double incbcf(double a, double b, double x){
+double incbcf(double a, double b, double x) {
   double xk, pk, pkm1, pkm2, qk, qkm1, qkm2;
   double k1, k2, k3, k4, k5, k6, k7, k8;
   double r, t, ans, thresh;
@@ -184,7 +177,6 @@ double incbcf(double a, double b, double x){
   thresh = 3.0 * MACHEP;
 
   do {
-
     xk = -(x * k1 * k2) / (k3 * k4);
     pk = pkm1 + pkm2 * xk;
     qk = qkm1 + qkm2 * xk;
@@ -201,17 +193,14 @@ double incbcf(double a, double b, double x){
     qkm2 = qkm1;
     qkm1 = qk;
 
-    if (qk != 0)
-      r = pk / qk;
+    if (qk != 0) r = pk / qk;
     if (r != 0) {
       t = ((ans - r) / r).abs();
       ans = r;
-    }
-    else
+    } else
       t = 1.0;
 
-    if (t < thresh)
-      return ans;
+    if (t < thresh) return ans;
 
     k1 += 1.0;
     k2 += 1.0;
@@ -234,7 +223,7 @@ double incbcf(double a, double b, double x){
       qkm2 *= big;
       qkm1 *= big;
     }
-  }while (++n < 300);
+  } while (++n < 300);
 
   return ans;
 }
@@ -242,7 +231,7 @@ double incbcf(double a, double b, double x){
 /* Continued fraction expansion #2
  * for incomplete beta integral
  */
-double incbd(double a, double b, double x){
+double incbd(double a, double b, double x) {
   double xk, pk, pkm1, pkm2, qk, qkm1, qkm2;
   double k1, k2, k3, k4, k5, k6, k7, k8;
   double r, t, ans, z, thresh;
@@ -268,7 +257,6 @@ double incbd(double a, double b, double x){
   thresh = 3.0 * MACHEP;
 
   do {
-
     xk = -(z * k1 * k2) / (k3 * k4);
     pk = pkm1 + pkm2 * xk;
     qk = qkm1 + qkm2 * xk;
@@ -285,17 +273,14 @@ double incbd(double a, double b, double x){
     qkm2 = qkm1;
     qkm1 = qk;
 
-    if (qk != 0)
-      r = pk / qk;
+    if (qk != 0) r = pk / qk;
     if (r != 0) {
       t = ((ans - r) / r).abs();
       ans = r;
-    }
-    else
+    } else
       t = 1.0;
 
-    if (t < thresh)
-      return ans;
+    if (t < thresh) return ans;
 
     k1 += 1.0;
     k2 -= 1.0;
@@ -318,16 +303,15 @@ double incbd(double a, double b, double x){
       qkm2 *= big;
       qkm1 *= big;
     }
-  }while (++n < 300);
+  } while (++n < 300);
 
   return ans;
 }
 
-
 /* Power series for incomplete beta integral.
  * Use when b*x is small and x not too close to 1.  */
 
-double pseries(double a, double b, double x){
+double pseries(double a, double b, double x) {
   double s, t, u, v, n, t1, z, ai;
 
   ai = 1.0 / a;
@@ -352,9 +336,8 @@ double pseries(double a, double b, double x){
   if ((a + b) < MAXGAM && u.abs() < MAXLOG) {
     t = 1.0 / beta(a, b);
     s = s * t * pow(x, a);
-  }
-  else {
-    t = -lbeta(a,b) + u + log(s);
+  } else {
+    t = -lbeta(a, b) + u + log(s);
     if (t < MINLOG)
       s = 0.0;
     else
